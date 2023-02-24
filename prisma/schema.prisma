@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Release {
+  id              String      @id @default(cuid())
+  artist          Artist?     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId        String?
+  catalogueNumber String
+  imageUrl        String
+  label           Label?      @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  labelId         String
+  personnel       Personnel[]
+  recorded        String?
+  released        String?
+  title           String
+  tracks          Track[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Artist {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  releases Release[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Personnel {
+  id          String   @id @default(cuid())
+  name        String
+  instruments String[]
+  tracks      Track[]
+  leader      Boolean  @default(false)
+  release     Release? @relation(fields: [releaseId], references: [id])
+  releaseId   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Track {
+  id         String      @id @default(cuid())
+  title      String
+  number     String?
+  composedBy String[]
+  length     String
+  personnel  Personnel[]
+  release    Release?    @relation(fields: [releaseId], references: [id])
+  releaseId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Label {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  releases Release[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

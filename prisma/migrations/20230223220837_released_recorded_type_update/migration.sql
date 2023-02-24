@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Release" ALTER COLUMN "recorded" SET DATA TYPE TEXT,
+ALTER COLUMN "released" SET DATA TYPE TEXT;
