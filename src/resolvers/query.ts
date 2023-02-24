@@ -1,6 +1,8 @@
 import prisma from "../utils/db";
 
 const Query = {
+  // Label
+  getAllLabels: () => prisma.label.findMany(),
   getAllReleases: () =>
     prisma.release.findMany({
       include: {

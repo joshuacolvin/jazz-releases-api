@@ -79,6 +79,7 @@ const schema = gql`
   }
 
   type Query {
+    getAllLabels: [Label]!
     getAllReleases: [Release]!
     getAllReleasesByLabel(name: String!): [Release]!
     getArtist(id: String!): Artist!
