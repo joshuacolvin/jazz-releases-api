@@ -33,6 +33,9 @@ const Query = {
           },
         },
       },
+      orderBy: {
+        released: "asc",
+      },
       include: {
         artist: true,
         personnel: true,
@@ -44,6 +47,9 @@ const Query = {
   getReleasesByLabelId: (_: any, query: any) => {
     return prisma.release.findMany({
       where: { labelId: query.labelId },
+      orderBy: {
+        catalogueNumber: "asc",
+      },
       include: {
         artist: true,
         tracks: true,
