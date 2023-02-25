@@ -68,6 +68,7 @@ model Track {
 model Label {
   id       String    @id @default(cuid())
   name     String    @unique
+  imageUrl String?
   releases Release[]
 
   createdAt DateTime @default(now())

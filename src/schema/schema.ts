@@ -70,11 +70,13 @@ const schema = gql`
 
   input LabelInput {
     name: String!
+    imageUrl: String
   }
 
   type Label {
     id: String!
     name: String!
+    imageUrl: String
     releases: [Release]
   }
 
