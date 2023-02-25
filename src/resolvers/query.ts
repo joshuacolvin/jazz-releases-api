@@ -25,7 +25,15 @@ const Query = {
       },
     });
   },
-  getLabel: (_: any, query: any) => {
+  getLabelByName: (_: any, query: any) => {
+    return prisma.label.findUnique({
+      where: query,
+      include: {
+        releases: true,
+      },
+    });
+  },
+  getLabelById: (_: any, query: any) => {
     return prisma.label.findUnique({
       where: query,
       include: {

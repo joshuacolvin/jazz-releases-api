@@ -83,7 +83,8 @@ const schema = gql`
     getAllReleases: [Release]!
     getAllReleasesByLabel(name: String!): [Release]!
     getArtist(id: String!): Artist!
-    getLabel(name: String!): Label!
+    getLabelByName(name: String!): Label!
+    getLabelById(id: ID!): Label!
   }
 
   type Mutation {
