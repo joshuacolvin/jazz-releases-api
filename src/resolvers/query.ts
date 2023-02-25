@@ -22,6 +22,25 @@ const Query = {
       },
     });
   },
+  getAllReleasesForArtist: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: {
+        personnel: {
+          some: {
+            name: {
+              contains: query.name,
+            },
+          },
+        },
+      },
+      include: {
+        artist: true,
+        personnel: true,
+        label: true,
+        tracks: true,
+      },
+    });
+  },
   getReleasesByLabelId: (_: any, query: any) => {
     return prisma.release.findMany({
       where: { labelId: query.labelId },
