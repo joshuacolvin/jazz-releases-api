@@ -2,6 +2,7 @@ import { gql } from "apollo-server";
 
 const schema = gql`
   input ReleaseInput {
+    id: String
     artist: ArtistInput!
     catalogueNumber: String!
     imageUrl: String
@@ -14,7 +15,7 @@ const schema = gql`
   }
 
   type Release {
-    id: ID!
+    id: String!
     artist: Artist!
     catalogueNumber: String!
     imageUrl: String
@@ -98,7 +99,9 @@ const schema = gql`
     createPersonnel(input: PersonnelInput!): Personnel!
     createRelease(input: ReleaseInput!): Release!
     createTrack(input: TrackInput!): Track!
+    deleteReleaseById(id: String!): Release!
     updateLabel(input: LabelInput!): Label!
+    updateRelease(input: ReleaseInput!): Release!
   }
 `;
 

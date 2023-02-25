@@ -55,6 +55,55 @@ export const Mutation = {
       },
     });
   },
+  updateRelease: (parent: any, args: any) => {
+    const {
+      id,
+      catalogueNumber,
+      label,
+      artist,
+      imageUrl,
+      personnel,
+      recorded,
+      released,
+      title,
+      tracks,
+    } = args.input;
+
+    return prisma.release.update({
+      where: { id: id },
+      data: {
+        artist: {
+          connectOrCreate: {
+            where: { name: artist.name },
+            create: { name: artist.name },
+          },
+        },
+        imageUrl: imageUrl,
+        title: title,
+        catalogueNumber: catalogueNumber,
+        label: {
+          connectOrCreate: {
+            where: { name: label.name },
+            create: { name: label.name },
+          },
+        },
+        recorded: recorded,
+        released: released,
+        personnel: {
+          create: personnel,
+        },
+        tracks: {
+          create: tracks,
+        },
+      },
+      include: {
+        artist: true,
+        label: true,
+        personnel: true,
+        tracks: true,
+      },
+    });
+  },
   updateLabel: (parent: any, args: any) => {
     const { id, name, imageUrl } = args.input;
     return prisma.label.update({
@@ -64,5 +113,28 @@ export const Mutation = {
         name,
       },
     });
+  },
+  deleteReleaseById: (parent: any, args: any) => {
+    const { id } = args;
+
+    const deleteTracks = prisma.track.deleteMany({
+      where: {
+        releaseId: id,
+      },
+    });
+
+    const deletePersonnel = prisma.personnel.deleteMany({
+      where: {
+        releaseId: id,
+      },
+    });
+
+    const deleteRelease = prisma.release.delete({
+      where: {
+        id,
+      },
+    });
+
+    return prisma.$transaction([deleteTracks, deletePersonnel, deleteRelease]);
   },
 };
