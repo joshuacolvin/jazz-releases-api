@@ -1,6 +1,13 @@
 import prisma from "../utils/db";
 
 export const Mutation = {
+  createLabel: (parent: any, args: any) => {
+    return prisma.label.create({
+      data: {
+        ...args.input,
+      },
+    });
+  },
   createRelease: (parent: any, args: any) => {
     const {
       catalogueNumber,
@@ -45,6 +52,16 @@ export const Mutation = {
         label: true,
         personnel: true,
         tracks: true,
+      },
+    });
+  },
+  updateLabel: (parent: any, args: any) => {
+    const { id, name, imageUrl } = args.input;
+    return prisma.label.update({
+      where: { id: id },
+      data: {
+        imageUrl,
+        name,
       },
     });
   },

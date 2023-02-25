@@ -69,6 +69,7 @@ const schema = gql`
   }
 
   input LabelInput {
+    id: String
     name: String!
     imageUrl: String
   }
@@ -97,6 +98,7 @@ const schema = gql`
     createPersonnel(input: PersonnelInput!): Personnel!
     createRelease(input: ReleaseInput!): Release!
     createTrack(input: TrackInput!): Track!
+    updateLabel(input: LabelInput!): Label!
   }
 `;
 

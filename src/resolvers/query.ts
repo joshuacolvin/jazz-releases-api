@@ -48,6 +48,7 @@ const Query = {
         artist: true,
         tracks: true,
         personnel: true,
+        label: true,
       },
     });
   },
