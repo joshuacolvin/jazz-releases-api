@@ -14,7 +14,10 @@ const Query = {
     }),
   getAllReleasesByLabel: (_: any, query: any) => {
     return prisma.release.findMany({
-      where: { label: { name: query.name } },
+      where: { label: { name: { equals: query.name, mode: "insensitive" } } },
+      orderBy: {
+        catalogueNumber: "asc",
+      },
       include: {
         artist: true,
         tracks: true,
@@ -29,12 +32,14 @@ const Query = {
           some: {
             name: {
               contains: query.name,
+              mode: "insensitive",
             },
           },
         },
       },
       orderBy: {
         released: "asc",
+        catalogueNumber: "asc",
       },
       include: {
         artist: true,
