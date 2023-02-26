@@ -87,6 +87,7 @@ const schema = gql`
     getAllReleases: [Release]!
     getAllReleasesByLabel(name: String!): [Release]!
     getReleasesByLabelId(labelId: String!): [Release]!
+    getReleasesByCatalogueNumber(catalogueNumber: String!): [Release]!
     getArtist(id: String!): Artist!
     getLabelByName(name: String!): Label!
     getLabelById(id: ID!): Label!

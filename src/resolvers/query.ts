@@ -46,6 +46,20 @@ const Query = {
       },
     });
   },
+  getReleasesByCatalogueNumber: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: { catalogueNumber: query.catalogueNumber },
+      orderBy: {
+        released: "asc",
+      },
+      include: {
+        artist: true,
+        personnel: true,
+        label: true,
+        tracks: true,
+      },
+    });
+  },
   getReleasesByLabelId: (_: any, query: any) => {
     return prisma.release.findMany({
       where: { labelId: query.labelId },
