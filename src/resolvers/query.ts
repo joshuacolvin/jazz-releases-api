@@ -114,6 +114,19 @@ const Query = {
       },
     });
   },
+  getRecommendedReleases: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: {
+        id: { in: query.releaseIds },
+      },
+      include: {
+        artist: true,
+        tracks: true,
+        personnel: true,
+        label: true,
+      },
+    });
+  },
 };
 
 export { Query };
