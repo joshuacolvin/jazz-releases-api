@@ -37,10 +37,7 @@ const Query = {
           },
         },
       },
-      orderBy: {
-        released: "asc",
-        catalogueNumber: "asc",
-      },
+      orderBy: [{ released: "asc" }, { catalogueNumber: "asc" }],
       include: {
         artist: true,
         personnel: true,
