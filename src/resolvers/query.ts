@@ -77,7 +77,7 @@ const Query = {
   getReleasesByLabelName: (_: any, query: any) => {
     return prisma.release.findMany({
       where: {
-        label: { name: { equals: query.labelName, mode: "insensitive" } },
+        label: { name: { contains: query.labelName, mode: "insensitive" } },
       },
       orderBy: {
         catalogueNumber: "asc",
