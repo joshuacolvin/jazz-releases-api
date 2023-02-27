@@ -94,6 +94,7 @@ const schema = gql`
     getLabelById(id: ID!): Label!
     getAllReleasesForArtist(name: String!): [Release]!
     getRecommendedReleases(releaseIds: [String]!): [Release]!
+    getReleaseById(releaseId: String!): Release
   }
 
   type Mutation {

@@ -28,14 +28,26 @@ const Query = {
   getAllReleasesForArtist: (_: any, query: any) => {
     return prisma.release.findMany({
       where: {
-        personnel: {
-          some: {
-            name: {
-              contains: query.name,
-              mode: "insensitive",
+        OR: [
+          {
+            personnel: {
+              some: {
+                name: {
+                  contains: query.name,
+                  mode: "insensitive",
+                },
+              },
             },
           },
-        },
+          {
+            artist: {
+              name: {
+                contains: query.name,
+                mode: "insensitive",
+              },
+            },
+          },
+        ],
       },
       orderBy: [{ released: "asc" }, { catalogueNumber: "asc" }],
       include: {
@@ -119,6 +131,17 @@ const Query = {
       where: {
         id: { in: query.releaseIds },
       },
+      include: {
+        artist: true,
+        tracks: true,
+        personnel: true,
+        label: true,
+      },
+    });
+  },
+  getReleaseById: (_: any, query: any) => {
+    return prisma.release.findUnique({
+      where: { id: query.releaseId },
       include: {
         artist: true,
         tracks: true,
