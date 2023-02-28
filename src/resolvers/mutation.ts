@@ -137,4 +137,9 @@ export const Mutation = {
 
     return prisma.$transaction([deleteTracks, deletePersonnel, deleteRelease]);
   },
+  deleteArtistById: (parent: any, args: any) => {
+    return prisma.artist.delete({
+      where: { id: args.artistId },
+    });
+  },
 };
