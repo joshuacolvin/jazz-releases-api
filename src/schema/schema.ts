@@ -38,6 +38,7 @@ const schema = gql`
   }
 
   input PersonnelInput {
+    id: String
     name: String!
     instruments: [String]!
     leader: Boolean!
