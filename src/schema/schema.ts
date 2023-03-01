@@ -54,6 +54,7 @@ const schema = gql`
   }
 
   input TrackInput {
+    id: String
     title: String!
     composedBy: [String]!
     length: String!
