@@ -101,17 +101,19 @@ export const Mutation = {
 
     const personnelUpdate = personnel?.map((p: Personnel) => {
       return prisma.personnel.upsert({
-        where: { id: p?.id },
+        where: { id: p.id },
         update: {
           id: p.id,
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
+          releaseId: id,
         },
         create: {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
+          releaseId: id,
         },
       });
     });
