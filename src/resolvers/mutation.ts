@@ -1,3 +1,4 @@
+import { Personnel, Track } from "@prisma/client";
 import prisma from "../utils/db";
 
 export const Mutation = {
@@ -69,7 +70,7 @@ export const Mutation = {
       tracks,
     } = args.input;
 
-    return prisma.release.update({
+    const releaseUpdate = prisma.release.update({
       where: { id: id },
       data: {
         artist: {
@@ -89,12 +90,6 @@ export const Mutation = {
         },
         recorded: recorded,
         released: released,
-        personnel: {
-          create: personnel,
-        },
-        tracks: {
-          create: tracks,
-        },
       },
       include: {
         artist: true,
@@ -103,6 +98,42 @@ export const Mutation = {
         tracks: true,
       },
     });
+
+    const personnelUpdate = personnel?.map((p: Personnel) => {
+      prisma.personnel.upsert({
+        where: { id: p?.id },
+        update: {
+          name: p.name,
+          instruments: p.instruments,
+          leader: p.leader,
+        },
+        create: {
+          name: p.name,
+          instruments: p.instruments,
+          leader: p.leader,
+        },
+      });
+    });
+
+    const tracksUpdate = tracks?.map((t: Track) => {
+      prisma.track.upsert({
+        where: { id: t?.id },
+        update: {
+          title: t.title,
+          composedBy: t.composedBy,
+          length: t.length,
+          number: t.number,
+        },
+        create: {
+          title: t.title,
+          composedBy: t.composedBy,
+          length: t.length,
+          number: t.number,
+        },
+      });
+    });
+
+    return prisma.$transaction([releaseUpdate, personnelUpdate, tracksUpdate]);
   },
   updateLabel: (parent: any, args: any) => {
     const { id, name, imageUrl } = args.input;
