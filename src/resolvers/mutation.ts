@@ -100,7 +100,7 @@ export const Mutation = {
     });
 
     const personnelUpdate = personnel?.map((p: Personnel) => {
-      prisma.personnel.upsert({
+      return prisma.personnel.upsert({
         where: { id: p?.id },
         update: {
           name: p.name,
@@ -116,7 +116,7 @@ export const Mutation = {
     });
 
     const tracksUpdate = tracks?.map((t: Track) => {
-      prisma.track.upsert({
+      return prisma.track.upsert({
         where: { id: t?.id },
         update: {
           title: t.title,
