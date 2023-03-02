@@ -132,11 +132,11 @@ export const Mutation = {
       });
     });
 
-    return prisma.$transaction([
-      releaseUpdate,
-      ...personnelUpdate,
-      ...tracksUpdate,
-    ]);
+    prisma.$transaction([releaseUpdate, ...personnelUpdate, ...tracksUpdate]);
+
+    return prisma.release.findUnique({
+      where: { id: id },
+    });
   },
   updateLabel: (parent: any, args: any) => {
     const { id, name, imageUrl } = args.input;
