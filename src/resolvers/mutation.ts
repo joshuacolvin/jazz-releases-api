@@ -91,12 +91,6 @@ export const Mutation = {
         recorded: recorded,
         released: released,
       },
-      include: {
-        artist: true,
-        label: true,
-        personnel: true,
-        tracks: true,
-      },
     });
 
     const personnelUpdate = personnel?.map((p: Personnel) => {
