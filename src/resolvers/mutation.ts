@@ -180,4 +180,9 @@ export const Mutation = {
       where: { id: args.artistId },
     });
   },
+  deletePersonnelById: (parent: any, args: any) => {
+    return prisma.personnel.delete({
+      where: { id: args.personnelId },
+    });
+  },
 };

@@ -106,7 +106,8 @@ const schema = gql`
     createRelease(input: ReleaseInput!): Release!
     createTrack(input: TrackInput!): Track!
     deleteArtistById(artistId: String!): ID
-    deleteReleaseById(id: String!): Release!
+    deleteReleaseById(id: String!): ID
+    deletePersonnelById(id: String!): ID
     updateLabel(input: LabelInput!): Label!
     updateRelease(input: ReleaseInput!): Release!
   }
