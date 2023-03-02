@@ -126,12 +126,14 @@ export const Mutation = {
           composedBy: t.composedBy,
           length: t.length,
           number: t.number,
+          releaseId: id,
         },
         create: {
           title: t.title,
           composedBy: t.composedBy,
           length: t.length,
           number: t.number,
+          releaseId: id,
         },
       });
     });
