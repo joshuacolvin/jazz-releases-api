@@ -185,4 +185,9 @@ export const Mutation = {
       where: { id: args.personnelId },
     });
   },
+  deleteTrackById: (parent: any, args: any) => {
+    return prisma.track.delete({
+      where: { id: args.trackId },
+    });
+  },
 };
