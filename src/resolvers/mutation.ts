@@ -101,13 +101,11 @@ export const Mutation = {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
-          releaseId: id,
         },
         create: {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
-          releaseId: id,
         },
       });
     });
@@ -120,19 +118,17 @@ export const Mutation = {
           composedBy: t.composedBy,
           length: t.length,
           number: t.number,
-          releaseId: id,
         },
         create: {
           title: t.title,
           composedBy: t.composedBy,
           length: t.length,
           number: t.number,
-          releaseId: id,
         },
       });
     });
 
-    prisma.$transaction([releaseUpdate, ...personnelUpdate, ...tracksUpdate]);
+    prisma.$transaction([releaseUpdate, personnelUpdate, tracksUpdate]);
 
     return prisma.release.findUnique({
       where: { id: id },
