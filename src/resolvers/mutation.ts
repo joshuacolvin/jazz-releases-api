@@ -128,7 +128,7 @@ export const Mutation = {
       });
     });
 
-    prisma.$transaction([releaseUpdate, personnelUpdate, tracksUpdate]);
+    prisma.$transaction([releaseUpdate, ...personnelUpdate, ...tracksUpdate]);
 
     return prisma.release.findUnique({
       where: { id: id },
