@@ -97,7 +97,6 @@ export const Mutation = {
       return prisma.personnel.upsert({
         where: { id: p.id },
         update: {
-          id: p.id,
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
