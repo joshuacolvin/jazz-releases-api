@@ -12,15 +12,20 @@ datasource db {
 }
 
 model Release {
-  id              String      @id @default(cuid())
+  id              String      @id @unique @default(cuid())
   artist          Artist?     @relation(fields: [artistId], references: [id], onDelete: Cascade)
   artistId        String?
   catalogueNumber String
+  designer        String?
+  engineer        String?
   imageUrl        String
   label           Label?      @relation(fields: [labelId], references: [id], onDelete: Cascade)
   labelId         String
   personnel       Personnel[]
+  photographer    String?
+  producer        String?
   recorded        String?
+  recordedAt      String?
   released        String?
   title           String
   tracks          Track[]
@@ -30,7 +35,7 @@ model Release {
 }
 
 model Artist {
-  id       String    @id @default(cuid())
+  id       String    @id @unique @default(cuid())
   name     String    @unique
   releases Release[]
 
@@ -39,7 +44,7 @@ model Artist {
 }
 
 model Personnel {
-  id          String   @id @default(cuid())
+  id          String   @id @unique @default(cuid())
   name        String
   instruments String[]
   tracks      Track[]
@@ -52,7 +57,7 @@ model Personnel {
 }
 
 model Track {
-  id         String      @id @default(cuid())
+  id         String      @id @unique @default(cuid())
   title      String
   number     String?
   composedBy String[]
@@ -66,7 +71,7 @@ model Track {
 }
 
 model Label {
-  id       String    @id @default(cuid())
+  id       String    @id @unique @default(cuid())
   name     String    @unique
   imageUrl String?
   releases Release[]

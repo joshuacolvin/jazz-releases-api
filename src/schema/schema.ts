@@ -12,6 +12,11 @@ const schema = gql`
     released: String
     title: String!
     tracks: [TrackInput]
+    designer: String
+    engineer: String
+    producer: String
+    photographer: String
+    recordedAt: String
   }
 
   type Release {
@@ -25,6 +30,11 @@ const schema = gql`
     released: String
     title: String!
     tracks: [Track]
+    engineer: String
+    designer: String
+    producer: String
+    photographer: String
+    recordedAt: String
   }
 
   input ArtistInput {

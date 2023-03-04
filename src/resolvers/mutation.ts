@@ -20,6 +20,11 @@ export const Mutation = {
       released,
       title,
       tracks,
+      producer,
+      engineer,
+      photographer,
+      designer,
+      recordedAt,
     } = args.input;
 
     return prisma.release.create({
@@ -41,6 +46,11 @@ export const Mutation = {
         },
         recorded: recorded,
         released: released,
+        engineer: engineer,
+        designer: designer,
+        photographer: photographer,
+        producer: producer,
+        recordedAt: recordedAt,
         personnel: {
           create: personnel,
         },
@@ -68,6 +78,11 @@ export const Mutation = {
       released,
       title,
       tracks,
+      engineer,
+      designer,
+      producer,
+      photographer,
+      recordedAt,
     } = args.input;
 
     const releaseUpdate = prisma.release.update({
@@ -95,7 +110,7 @@ export const Mutation = {
 
     const personnelUpdate = personnel?.map((p: Personnel) => {
       return prisma.personnel.upsert({
-        where: { id: p.id },
+        where: { id: p?.id ? p.id : "0" },
         update: {
           name: p.name,
           instruments: p.instruments,
@@ -105,13 +120,14 @@ export const Mutation = {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
+          releaseId: id,
         },
       });
     });
 
     const tracksUpdate = tracks?.map((t: Track) => {
       return prisma.track.upsert({
-        where: { id: t?.id },
+        where: { id: t?.id ? t.id : "0" },
         update: {
           title: t.title,
           composedBy: t.composedBy,
@@ -123,6 +139,7 @@ export const Mutation = {
           composedBy: t.composedBy,
           length: t.length,
           number: t.number,
+          releaseId: id,
         },
       });
     });
