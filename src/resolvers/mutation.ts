@@ -20,11 +20,6 @@ export const Mutation = {
       released,
       title,
       tracks,
-      producer,
-      engineer,
-      photographer,
-      designer,
-      recordedAt,
     } = args.input;
 
     return prisma.release.create({
@@ -46,11 +41,6 @@ export const Mutation = {
         },
         recorded: recorded,
         released: released,
-        engineer: engineer,
-        designer: designer,
-        photographer: photographer,
-        producer: producer,
-        recordedAt: recordedAt,
         personnel: {
           create: personnel,
         },
@@ -60,9 +50,9 @@ export const Mutation = {
       },
       include: {
         artist: true,
-        label: true,
         personnel: true,
         tracks: true,
+        label: true,
       },
     });
   },
@@ -78,11 +68,6 @@ export const Mutation = {
       released,
       title,
       tracks,
-      engineer,
-      designer,
-      producer,
-      photographer,
-      recordedAt,
     } = args.input;
 
     const releaseUpdate = prisma.release.update({
@@ -115,12 +100,14 @@ export const Mutation = {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
+          appearsOn: p.appearsOn,
         },
         create: {
           name: p.name,
           instruments: p.instruments,
           leader: p.leader,
           releaseId: id,
+          appearsOn: p.appearsOn,
         },
       });
     });

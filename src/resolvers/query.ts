@@ -2,13 +2,17 @@ import prisma from "../utils/db";
 
 const Query = {
   // Label
-  getAllLabels: () => prisma.label.findMany(),
+  getAllLabels: () =>
+    prisma.label.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
   getAllReleases: () =>
     prisma.release.findMany({
       include: {
         artist: true,
         label: true,
-        personnel: true,
         tracks: true,
       },
     }),
@@ -21,7 +25,6 @@ const Query = {
       include: {
         artist: true,
         tracks: true,
-        personnel: true,
       },
     });
   },
@@ -52,9 +55,52 @@ const Query = {
       orderBy: [{ released: "asc" }, { catalogueNumber: "asc" }],
       include: {
         artist: true,
-        personnel: true,
         label: true,
         tracks: true,
+        personnel: true,
+      },
+    });
+  },
+  getReleasesForLeader: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: {
+        artist: {
+          name: {
+            contains: query.name,
+            mode: "insensitive",
+          },
+        },
+      },
+      orderBy: [{ released: "asc" }, { catalogueNumber: "asc" }],
+      include: {
+        artist: true,
+        label: true,
+        tracks: true,
+        personnel: true,
+      },
+    });
+  },
+  getReleasesForSideman: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: {
+        personnel: {
+          some: {
+            name: {
+              contains: query.name,
+              mode: "insensitive",
+            },
+            leader: {
+              equals: false,
+            },
+          },
+        },
+      },
+      orderBy: [{ released: "asc" }, { catalogueNumber: "asc" }],
+      include: {
+        artist: true,
+        label: true,
+        tracks: true,
+        personnel: true,
       },
     });
   },
@@ -66,7 +112,6 @@ const Query = {
       },
       include: {
         artist: true,
-        personnel: true,
         label: true,
         tracks: true,
       },
@@ -81,8 +126,8 @@ const Query = {
       include: {
         artist: true,
         tracks: true,
-        personnel: true,
         label: true,
+        personnel: true,
       },
     });
   },
@@ -97,8 +142,8 @@ const Query = {
       include: {
         artist: true,
         tracks: true,
-        personnel: true,
         label: true,
+        personnel: true,
       },
     });
   },
@@ -134,7 +179,6 @@ const Query = {
       include: {
         artist: true,
         tracks: true,
-        personnel: true,
         label: true,
       },
     });
@@ -144,9 +188,36 @@ const Query = {
       where: { id: query.releaseId },
       include: {
         artist: true,
+        label: true,
         tracks: true,
         personnel: true,
+      },
+    });
+  },
+  getReleaseByTitle: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: { title: { contains: query.title, mode: "insensitive" } },
+      include: {
+        artist: true,
         label: true,
+      },
+    });
+  },
+  getReleasesBySeries: (_: any, query: any) => {
+    return prisma.release.findMany({
+      where: {
+        catalogueNumber: {
+          lte: query.last,
+          gte: query.first,
+        },
+      },
+      orderBy: {
+        catalogueNumber: "asc",
+      },
+      include: {
+        artist: true,
+        label: true,
+        personnel: true,
       },
     });
   },

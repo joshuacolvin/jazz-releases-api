@@ -1,22 +1,27 @@
+import { Personnel } from "@prisma/client";
 import { gql } from "apollo-server";
 
 const schema = gql`
-  input ReleaseInput {
-    id: String
-    artist: ArtistInput!
-    catalogueNumber: String!
+  type Artist {
+    id: String!
+    name: String!
+    releases: [Release!]!
+  }
+
+  type Label {
+    id: String!
+    name: String!
     imageUrl: String
-    label: LabelInput!
-    personnel: [PersonnelInput]
-    recorded: String
-    released: String
-    title: String!
-    tracks: [TrackInput]
-    designer: String
-    engineer: String
-    producer: String
-    photographer: String
-    recordedAt: String
+    releases: [Release]
+  }
+
+  type Personnel {
+    id: String!
+    name: String!
+    instruments: [String]!
+    appearsOn: [String]
+    leader: Boolean!
+    release: Release
   }
 
   type Release {
@@ -30,45 +35,6 @@ const schema = gql`
     released: String
     title: String!
     tracks: [Track]
-    engineer: String
-    designer: String
-    producer: String
-    photographer: String
-    recordedAt: String
-  }
-
-  input ArtistInput {
-    name: String!
-  }
-
-  type Artist {
-    id: String!
-    name: String!
-    releases: [Release!]!
-  }
-
-  input PersonnelInput {
-    id: String
-    name: String!
-    instruments: [String]!
-    leader: Boolean!
-  }
-
-  type Personnel {
-    id: String!
-    name: String!
-    instruments: [String]!
-    tracks: [Track]
-    leader: Boolean!
-    release: Release
-  }
-
-  input TrackInput {
-    id: String
-    title: String!
-    composedBy: [String]!
-    length: String!
-    number: String
   }
 
   type Track {
@@ -81,17 +47,43 @@ const schema = gql`
     number: String
   }
 
+  input ArtistInput {
+    name: String!
+  }
+
   input LabelInput {
     id: String
     name: String!
     imageUrl: String
   }
 
-  type Label {
-    id: String!
+  input PersonnelInput {
+    id: String
     name: String!
+    instruments: [String]!
+    leader: Boolean!
+    appearsOn: [String]
+  }
+
+  input ReleaseInput {
+    id: String
+    artist: ArtistInput!
+    catalogueNumber: String!
     imageUrl: String
-    releases: [Release]
+    label: LabelInput!
+    personnel: [PersonnelInput]
+    recorded: String
+    released: String
+    title: String!
+    tracks: [TrackInput]
+  }
+
+  input TrackInput {
+    id: String
+    title: String!
+    composedBy: [String]!
+    length: String!
+    number: String
   }
 
   type Query {
@@ -101,19 +93,23 @@ const schema = gql`
     getReleasesByLabelId(labelId: String!): [Release]!
     getReleasesByLabelName(labelName: String!): [Release]!
     getReleasesByCatalogueNumber(catalogueNumber: String!): [Release]!
+    getReleasesForLeader(name: String!): [Release]!
+    getReleasesForSideman(name: String!): [Release]!
     getArtist(id: String!): Artist!
     getLabelByName(name: String!): Label!
     getLabelById(id: ID!): Label!
     getAllReleasesForArtist(name: String!): [Release]!
     getRecommendedReleases(releaseIds: [String]!): [Release]!
     getReleaseById(releaseId: String!): Release
+    getReleaseByTitle(title: String!): [Release]!
+    getReleasesBySeries(last: String!, first: String!): [Release]!
   }
 
   type Mutation {
     createArtist(input: ArtistInput!): Artist!
     createLabel(input: LabelInput!): Label!
     createPersonnel(input: PersonnelInput!): Personnel!
-    createRelease(input: ReleaseInput!): Release!
+    createRelease(input: ReleaseInput!): ID
     createTrack(input: TrackInput!): Track!
     deleteArtistById(artistId: String!): ID
     deleteReleaseById(id: String!): ID
