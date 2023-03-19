@@ -24,8 +24,6 @@ model Release {
   released        String?
   title           String
   tracks          Track[]
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -74,10 +72,4 @@ model Label {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model User {
-  id       String    @id @unique @default(uuid())
-  name     String
-  releases Release[]
 }
