@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["clientExtensions"]
+  previewFeatures = []
 }
 
 datasource db {
@@ -12,27 +12,80 @@ datasource db {
 }
 
 model Release {
-  id              String      @id @unique @default(cuid())
-  artist          Artist?     @relation(fields: [artistId], references: [id], onDelete: Cascade)
-  artistId        String?
+  id              String        @id @unique @default(cuid())
   catalogueNumber String
   imageUrl        String
-  label           Label?      @relation(fields: [labelId], references: [id], onDelete: Cascade)
+  label           Label?        @relation(fields: [labelId], references: [id], onDelete: Cascade)
   labelId         String
-  personnel       Personnel[]
-  recorded        String?
+  artist          Artist?       @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId        String
   released        String?
   title           String
-  tracks          Track[]
+  sessions        Session[]
+  producer        Producer?     @relation(fields: [producerId], references: [id])
+  producerId      String?
+  designer        Designer?     @relation(fields: [designerId], references: [id])
+  designerId      String?
+  photographer    Photographer? @relation(fields: [photographerId], references: [id])
+  photographerId  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Artist {
+model Session {
+  id         String      @id @unique @default(cuid())
+  date       String
+  release    Release     @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  releaseId  String
+  tracks     Track[]
+  personnel  Personnel[]
+  studio     Studio      @relation(fields: [studioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studioId   String
+  engineer   Engineer?   @relation(fields: [engineerId], references: [id])
+  engineerId String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Engineer {
+  id       String    @id @unique @default(cuid())
+  name     String    @unique
+  sessions Session[]
+}
+
+model Producer {
   id       String    @id @unique @default(cuid())
   name     String    @unique
   releases Release[]
+}
+
+model Designer {
+  id       String    @id @unique @default(cuid())
+  name     String    @unique
+  releases Release[]
+}
+
+model Photographer {
+  id       String    @id @unique @default(cuid())
+  name     String    @unique
+  releases Release[]
+}
+
+model Studio {
+  id        String    @id @unique @default(cuid())
+  name      String    @unique
+  location  String?
+  sessions  Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Artist {
+  id        String      @id @unique @default(cuid())
+  name      String      @unique
+  releases  Release[]
+  personnel Personnel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,12 +93,13 @@ model Artist {
 
 model Personnel {
   id          String   @id @unique @default(cuid())
-  name        String
+  artist      Artist?  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId    String
   instruments String[]
   appearsOn   String[]
   leader      Boolean  @default(false)
-  release     Release? @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  releaseId   String?
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sessionId   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,11 +108,11 @@ model Personnel {
 model Track {
   id         String   @id @unique @default(cuid())
   title      String
-  number     String?
+  number     String
   composedBy String[]
   length     String
-  release    Release? @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  releaseId  String?
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sessionId  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

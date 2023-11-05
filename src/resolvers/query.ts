@@ -11,9 +11,20 @@ const Query = {
   getAllReleases: () =>
     prisma.release.findMany({
       include: {
-        artist: true,
         label: true,
-        tracks: true,
+        artist: true,
+        sessions: {
+          include: {
+            personnel: {
+              include: {
+                artist: true,
+              },
+            },
+            engineer: true,
+            studio: true,
+            tracks: true,
+          },
+        },
       },
     }),
   getAllReleasesByLabel: (_: any, query: any) => {
@@ -24,29 +35,25 @@ const Query = {
       },
       include: {
         artist: true,
-        tracks: true,
+        sessions: true,
       },
     });
   },
   getAllReleasesForArtist: (_: any, query: any) => {
     return prisma.release.findMany({
       where: {
+        artist: { name: { contains: query.name, mode: "insensitive" } },
         OR: [
           {
-            personnel: {
+            sessions: {
               some: {
-                name: {
-                  contains: query.name,
-                  mode: "insensitive",
+                personnel: {
+                  some: {
+                    artist: {
+                      name: { contains: query.name, mode: "insensitive" },
+                    },
+                  },
                 },
-              },
-            },
-          },
-          {
-            artist: {
-              name: {
-                contains: query.name,
-                mode: "insensitive",
               },
             },
           },
@@ -56,18 +63,25 @@ const Query = {
       include: {
         artist: true,
         label: true,
-        tracks: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
   getReleasesForLeader: (_: any, query: any) => {
     return prisma.release.findMany({
       where: {
-        artist: {
-          name: {
-            contains: query.name,
-            mode: "insensitive",
+        sessions: {
+          some: {
+            personnel: {
+              some: {
+                artist: { name: { contains: query.name, mode: "insensitive" } },
+                AND: {
+                  leader: {
+                    equals: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -75,22 +89,24 @@ const Query = {
       include: {
         artist: true,
         label: true,
-        tracks: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
   getReleasesForSideman: (_: any, query: any) => {
     return prisma.release.findMany({
       where: {
-        personnel: {
+        sessions: {
           some: {
-            name: {
-              contains: query.name,
-              mode: "insensitive",
-            },
-            leader: {
-              equals: false,
+            personnel: {
+              some: {
+                artist: { name: { contains: query.name, mode: "insensitive" } },
+                AND: {
+                  leader: {
+                    equals: false,
+                  },
+                },
+              },
             },
           },
         },
@@ -99,8 +115,7 @@ const Query = {
       include: {
         artist: true,
         label: true,
-        tracks: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
@@ -113,7 +128,7 @@ const Query = {
       include: {
         artist: true,
         label: true,
-        tracks: true,
+        sessions: true,
       },
     });
   },
@@ -125,9 +140,8 @@ const Query = {
       },
       include: {
         artist: true,
-        tracks: true,
         label: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
@@ -141,17 +155,20 @@ const Query = {
       },
       include: {
         artist: true,
-        tracks: true,
         label: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
   getArtist: (_: any, query: any) => {
     return prisma.artist.findUnique({
       where: query,
-      include: {
-        releases: true,
+    });
+  },
+  getAllArtists: (_: any) => {
+    return prisma.artist.findMany({
+      orderBy: {
+        name: "asc",
       },
     });
   },
@@ -177,8 +194,7 @@ const Query = {
         id: { in: query.releaseIds },
       },
       include: {
-        artist: true,
-        tracks: true,
+        sessions: true,
         label: true,
       },
     });
@@ -188,9 +204,24 @@ const Query = {
       where: { id: query.releaseId },
       include: {
         artist: true,
+        producer: true,
+        designer: true,
+        photographer: true,
         label: true,
-        tracks: true,
-        personnel: true,
+        sessions: {
+          include: {
+            engineer: true,
+            personnel: {
+              orderBy: { leader: "desc" },
+              include: {
+                artist: true,
+              },
+            },
+            tracks: true,
+            studio: true,
+          },
+          orderBy: { date: "desc" },
+        },
       },
     });
   },
@@ -200,6 +231,7 @@ const Query = {
       include: {
         artist: true,
         label: true,
+        sessions: { include: { personnel: true, tracks: true } },
       },
     });
   },
@@ -217,7 +249,7 @@ const Query = {
       include: {
         artist: true,
         label: true,
-        personnel: true,
+        sessions: true,
       },
     });
   },
