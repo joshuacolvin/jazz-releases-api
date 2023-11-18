@@ -264,6 +264,18 @@ export const Mutation = {
       },
     });
   },
+  updateArtist: (parent: any, args: any) => {
+    const { id, name, dob, imageUrl, bio } = args.input;
+    return prisma.artist.update({
+      where: { id: id },
+      data: {
+        name,
+        dob,
+        imageUrl,
+        bio,
+      },
+    });
+  },
   deleteReleaseById: (parent: any, args: any) => {
     const { id } = args;
 

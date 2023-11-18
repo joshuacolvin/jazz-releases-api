@@ -4,6 +4,9 @@ const schema = gql`
   type Artist {
     id: String!
     name: String!
+    dob: String
+    imageUrl: String
+    bio: String
     releases: [Release]
   }
 
@@ -92,6 +95,9 @@ const schema = gql`
   input ArtistInput {
     id: String
     name: String!
+    dob: String
+    imageUrl: String
+    bio: String
   }
 
   input EngineerInput {
@@ -176,6 +182,7 @@ const schema = gql`
     getReleasesForLeader(name: String!): [Release]!
     getReleasesForSideman(name: String!): [Release]!
     getArtist(id: String!): Artist!
+    getArtistById(artistId: String!): Artist!
     getAllArtists: [Artist]!
     getLabelByName(name: String!): Label!
     getLabelById(id: ID!): Label!
@@ -198,6 +205,7 @@ const schema = gql`
     deletePersonnelById(personnelId: String!): Personnel
     deleteTrackById(trackId: String!): Track
     updateLabel(input: LabelInput!): Label!
+    updateArtist(input: ArtistInput!): Artist!
     updateRelease(input: ReleaseInput!): Release!
   }
 `;

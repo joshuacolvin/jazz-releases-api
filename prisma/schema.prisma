@@ -84,6 +84,9 @@ model Studio {
 model Artist {
   id        String      @id @unique @default(cuid())
   name      String      @unique
+  dob       String?
+  bio       String?
+  imageUrl  String?
   releases  Release[]
   personnel Personnel[]
 

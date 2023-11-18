@@ -165,6 +165,18 @@ const Query = {
       where: query,
     });
   },
+  getArtistById: (_: any, query: any) => {
+    return prisma.artist.findUnique({
+      where: { id: query.artistId },
+      include: {
+        releases: {
+          include: {
+            artist: true,
+          },
+        },
+      },
+    });
+  },
   getAllArtists: (_: any) => {
     return prisma.artist.findMany({
       orderBy: {
